@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4D Intuition Lab</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background-color: #050505; 
+            background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), 
+                        url('page1.jpg') no-repeat center center fixed !important;
+            background-size: cover !important;
+            font-family: 'Inter', sans-serif; 
+            color: white;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Your Name - Bottom Left Corner */
+        .creator-name {
+            position: absolute;
+            bottom: 48px;
+            left: 40px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 500;
+            z-index: 100;
+            opacity: 0.8;
+        }
+
+        .title-container { 
+            position: absolute; 
+            top: 48px; 
+            left: 0; 
+            width: 100%; 
+            text-align: center; 
+            z-index: 10; 
+        }
+
+        .main-title { 
+            font-size: 32px; 
+            font-weight: 500; 
+            letter-spacing: 8px; 
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .title-line { 
+            width: 100%; 
+            height: 1px; 
+            background-color: white; 
+            margin-top: 18px; 
+            opacity: 0.8; 
+        }
+
+        .subtitle {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-top: 24px;
+        }
+
+        .ui-panel { 
+            position: absolute; 
+            top: 200px; 
+            left: 40px; 
+            width: 320px; 
+            z-index: 20; 
+        }
+
+        .project-item { margin-bottom: 32px; }
+
+        .project-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: white;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-link:hover { opacity: 0.6; }
+        .project-link .label { opacity: 0.4; font-size: 10px; }
+
+        .project-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin: 8px 0 0 35px;
+            letter-spacing: 0.5px;
+        }
+
+        .ui-divider { 
+            height: 1px; 
+            background: rgba(255, 255, 255, 0.2); 
+            margin: 32px 0;
+        }
+
+        .info-panel { 
+            position: absolute; 
+            bottom: 48px; 
+            right: 48px; 
+            width: 300px; 
+            font-size: 11px; 
+            line-height: 1.8; 
+            letter-spacing: 1px; 
+            opacity: 0.5; 
+            text-align: right; 
+        }
+
+        sup { font-size: 70%; top: -0.5em; position: relative; vertical-align: baseline; }
+    </style>
+</head>
+<body>
+
+<div class="creator-name">Raluca-Antonia Dragonici</div>
+
+<div class="title-container">
+    <div class="main-title">4D INTUITION LAB</div>
+    <div class="title-line"></div>
+    <p class="subtitle">Interactive mathematical visualizations built with Three.js</p>
+</div>
+
+<div class="ui-panel">
+    <div class="project-item">
+        <a href="stereographic/index.html" class="project-link">
+            <span class="label">01</span>
+            <span class="text">Stereographic Projection</span>
+        </a>
+        <p class="project-desc">Interactive mapping from S<sup>2</sup> to the plane.</p>
+    </div>
+
+    <div class="ui-divider"></div>
+
+    <div class="project-item">
+        <a href="hopf/index.html" class="project-link">
+            <span class="label">02</span>
+            <span class="text">Hopf Fibration</span>
+        </a>
+        <p class="project-desc">Visualization of fibers of S<sup>3</sup> projected onto S<sup>2</sup>.</p>
+    </div>
+</div>
+
+<div class="info-panel">
+   <p>Exploring the intersection of topology, geometry, and real-time rendering, all presented in an artistic way that can be enjoyed without a mathematical background.</p>
+</div>
+
+</body>
+</html>

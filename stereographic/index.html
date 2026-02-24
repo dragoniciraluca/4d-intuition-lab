@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stereographic Projection</title>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #050505;
+            /* Updated font-family to Inter */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: white;
+        }
+
+        .title-container {
+            position: absolute;
+            top: 48px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .main-title {
+            font-size: 42px;
+            font-weight: 500;
+            letter-spacing: 6px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .title-line {
+            width: 100%;
+            height: 1px;
+            background-color: #ffffff;
+            margin-top: 18px;
+            opacity: 0.8;
+        }
+
+        .ui-panel {
+            position: absolute;
+            top: 140px;
+            left: 40px;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            z-index: 20;
+        }
+
+        .ui-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .ui-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .ui-toggle input {
+            display: none;
+        }
+
+        .toggle-track {
+            width: 36px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.4);
+            position: relative;
+            transition: 0.3s ease;
+        }
+
+        .toggle-track::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            background: white;
+            transition: 0.3s ease;
+        }
+
+        .ui-toggle input:checked + .toggle-track {
+            background: white;
+        }
+
+        .ui-toggle input:checked + .toggle-track::after {
+            transform: translateX(28px);
+        }
+
+        .ui-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .ui-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 0;
+            text-align: left;
+            opacity: 0.6;
+            transition: opacity 0.3s ease, transform 0.1s ease;
+        }
+
+        .ui-button:hover {
+            opacity: 1;
+        }
+        
+        .ui-button:active {
+            transform: scale(0.98);
+        }
+
+        .info-panel {
+            position: absolute;
+            top: 140px;
+            right: 40px;
+            width: 260px;
+            font-size: 12px;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        #warning {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff4d4d;
+            font-size: 12px;
+            letter-spacing: 1px;
+            display: none;
+            z-index: 30;
+        }
+
+        #flash-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: white;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.05s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="title-container">
+        <div class="main-title">STEREOGRAPHIC PROJECTION</div>
+        <div class="title-line"></div>
+    </div>
+
+    <div class="ui-panel">
+        <div class="ui-group">
+            <label class="ui-toggle">
+                <span>Point</span>
+                <input type="checkbox" id="toggle-point">
+                <div class="toggle-track"></div>
+            </label>
+
+            <label class="ui-toggle">
+                <span>Longitude</span>
+                <input type="checkbox" id="toggle-longitude">
+                <div class="toggle-track"></div>
+            </label>
+
+            <label class="ui-toggle">
+                <span>Latitude</span>
+                <input type="checkbox" id="toggle-latitude">
+                <div class="toggle-track"></div>
+            </label>
+        </div>
+
+        <div class="ui-divider"></div>
+
+        <button id="reset-btn" class="ui-button">Reset</button>
+        <button id="freeze-btn" class="ui-button">Freeze</button>
+        <button id="capture-btn" class="ui-button">Capture</button>
+    </div>
+    
+    <div class="info-panel">
+        <p>Click anywhere on the sphere to select a point or a circle (latitude or longitude).</p>
+        <p>The projection shows how the curved surface of the sphere can be drawn onto a flat plane.</p>
+        <p style="margin-top: 15px;">
+            <strong>Reset</strong> clears everything.<br>
+            <strong>Freeze</strong> keeps your current selection.<br>
+            <strong>Capture</strong> saves the current view.
+        </p>
+    </div>
+
+    <div id="warning">No projection for north pole.</div>
+
+    <div id="flash-overlay"></div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
